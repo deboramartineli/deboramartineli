@@ -1,0 +1,25 @@
+name: Lista de Exercícios 1 - Item 3
+description: >-
+  Layout do suplemento: 1 caixa de texto, 1 botão "Adicionar" e 1 botão
+  "Resultado". Funcionalidade do suplemento: permitir digitar várias idades,
+  validando se é número toda vez que clicar em "Adicionar", e se estiver tudo
+  certo, ir armazenando cada idade em um Array. Ao clicar no botão "Resultado",
+  exibir como resultado todas as idades previamente cadastradas, um resultado
+  por linha. Atenção: todas as mensagens de saída (tanto validações quanto
+  resultados finais) devem ser exibidas no Word.
+host: WORD
+api_set: {}
+script:
+  content: "const field = document.getElementById(\"field\") as HTMLInputElement;\r\nconst buttonAdd = document.getElementById(\"buttonAdd\") as HTMLButtonElement;\r\nconst buttonResult = document.getElementById(\"buttonResult\") as HTMLButtonElement;\r\n\r\n// Criando um Array global que armazenará todas as idades que o usuário cadastrar.\r\nconst ages = [];\r\n\r\nbuttonAdd.addEventListener(\"click\", () => {\r\n  Word.run(async (context) => {\r\n    const body = context.document.body;\r\n    body.clear();\r\n\r\n    if (isNaN(field.valueAsNumber)) {\r\n      body.insertParagraph(\"Apenas números são válidos!\", \"End\");\r\n      return;\r\n    }\r\n\r\n    // Empurra um novo elemento (o valor digitado no campo) para dentro do Array global.\r\n    ages.push(field.valueAsNumber);\r\n\r\n    // Esvazia o valor do campo, para o usuário entender que deu certo adicionar a idade.\r\n    field.value = \"\";\r\n  });\r\n});\r\n\r\nbuttonResult.addEventListener(\"click\", () => {\r\n  Word.run(async (context) => {\r\n    const body = context.document.body;\r\n    body.clear();\r\n\r\n    // Percorre cada valor do Array de idades, preenchendo a variável age a cada iteração.\r\n    for (let age of ages) {\r\n      body.insertParagraph(`Idade: ${age}.`, \"End\");\r\n    }\r\n  });\r\n});\r\n"
+  language: typescript
+template:
+  content: "<input id=\"field\" type=\"number\" placeholder=\"Informe uma idade\">\r\n<button id=\"buttonAdd\">Adicionar</button>\r\n<button id=\"buttonResult\">Resultado</button>"
+  language: html
+style:
+  content: ''
+  language: css
+libraries: |-
+  https://appsforoffice.microsoft.com/lib/1/hosted/office.js
+  @types/office-js
+  core-js@2.4.1/client/core.min.js
+  @types/core-js
